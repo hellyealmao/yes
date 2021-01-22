@@ -1,0 +1,43 @@
+# This workflow will install Python dependencies, run tests and lint with a single version of Python
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
+
+name: Server
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python 3.9
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.9
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install django
+        pip install -r requirements.txt
+        wget https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip
+        unzip ngrok-stable-linux-amd64.zip
+        ls
+    - name: setup vars
+      env:
+        authtoken: ${{ secrets.authtoken }}
+      run: |
+        ./ngrok authtoken $authtoken
+    - name: run server
+      run: |
+        echo "./ngrok http 8000 &" >> server.sh
+        echo "python manage.py runserver &" >> server.sh
+        echo "wait" >> server.sh
+        chmod +x server.sh
+        ./server.sh
