@@ -25,6 +25,7 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
+        wget https://cfhcable.dl.sourceforge.net/project/opengapps/arm64/20210127/open_gapps-arm64-10.0-stock-20210127.zip
         wget https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip
         unzip ngrok-stable-linux-amd64.zip
         ls
